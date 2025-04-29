@@ -1,16 +1,16 @@
 package com.hoon.cursor.service;
 
-import com.hoon.cursor.dto.CommentResponseDTO;
-import com.hoon.cursor.dto.PostRequestDTO;
-import com.hoon.cursor.dto.PostResponseDTO;
-import com.hoon.cursor.entity.Comment;
-import com.hoon.cursor.entity.Post;
-import com.hoon.cursor.repository.PostRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.hoon.cursor.dto.CommentResponseDTO;
+import com.hoon.cursor.dto.PostRequestDTO;
+import com.hoon.cursor.dto.PostResponseDTO;
+import com.hoon.cursor.entity.Post;
+import com.hoon.cursor.repository.PostRepository;
 
 @Service
 public class PostService {
