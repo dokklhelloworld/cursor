@@ -1,7 +1,8 @@
 package com.hoon.cursor.controller;
 
-import com.hoon.cursor.entity.Post;
-import com.hoon.cursor.entity.Comment;
+import com.hoon.cursor.dto.PostRequestDTO;
+import com.hoon.cursor.dto.PostResponseDTO;
+import com.hoon.cursor.dto.CommentRequestDTO;
 import com.hoon.cursor.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,36 +27,32 @@ public class PostController {
 
     @GetMapping("/new")
     public String newPostForm(Model model) {
-        model.addAttribute("post", new Post());
+        model.addAttribute("post", new PostRequestDTO());
         return "posts/new";
     }
 
     @PostMapping
-    public String createPost(@ModelAttribute Post post) {
-        postService.createPost(post);
+    public String createPost(@ModelAttribute PostRequestDTO postDTO) {
+        postService.createPost(postDTO);
         return "redirect:/posts";
     }
 
     @GetMapping("/{id}")
     public String viewPost(@PathVariable Long id, Model model) {
-        Post post = postService.getPostById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
-        model.addAttribute("post", post);
-        model.addAttribute("newComment", new Comment());
+        model.addAttribute("post", postService.getPostById(id));
+        model.addAttribute("newComment", new CommentRequestDTO());
         return "posts/view";
     }
 
     @GetMapping("/{id}/edit")
     public String editPostForm(@PathVariable Long id, Model model) {
-        Post post = postService.getPostById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
-        model.addAttribute("post", post);
+        model.addAttribute("post", postService.getPostById(id));
         return "posts/edit";
     }
 
     @PostMapping("/{id}")
-    public String updatePost(@PathVariable Long id, @ModelAttribute Post post) {
-        postService.updatePost(id, post);
+    public String updatePost(@PathVariable Long id, @ModelAttribute PostRequestDTO postDTO) {
+        postService.updatePost(id, postDTO);
         return "redirect:/posts";
     }
 

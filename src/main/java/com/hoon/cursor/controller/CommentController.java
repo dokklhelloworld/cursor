@@ -1,6 +1,6 @@
 package com.hoon.cursor.controller;
 
-import com.hoon.cursor.entity.Comment;
+import com.hoon.cursor.dto.CommentRequestDTO;
 import com.hoon.cursor.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +17,8 @@ public class CommentController {
     }
 
     @PostMapping
-    public String createComment(@PathVariable Long postId, @ModelAttribute Comment comment) {
-        commentService.createComment(postId, comment);
+    public String createComment(@PathVariable Long postId, @ModelAttribute CommentRequestDTO commentDTO) {
+        commentService.createComment(postId, commentDTO);
         return "redirect:/posts/" + postId;
     }
 

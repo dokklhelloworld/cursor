@@ -1,5 +1,7 @@
 package com.hoon.cursor.service;
 
+import com.hoon.cursor.dto.CommentRequestDTO;
+import com.hoon.cursor.dto.CommentResponseDTO;
 import com.hoon.cursor.entity.Comment;
 import com.hoon.cursor.entity.Post;
 import com.hoon.cursor.repository.CommentRepository;
@@ -8,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -21,19 +23,25 @@ public class CommentService {
         this.postRepository = postRepository;
     }
 
-    public List<Comment> getCommentsByPostId(Long postId) {
-        return commentRepository.findByPostId(postId);
+    public List<CommentResponseDTO> getCommentsByPostId(Long postId) {
+        return commentRepository.findByPostId(postId).stream()
+                .map(CommentResponseDTO::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Comment createComment(Long postId, Comment comment) {
+    public CommentResponseDTO createComment(Long postId, CommentRequestDTO commentDTO) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
         
+        Comment comment = new Comment();
+        comment.setContent(commentDTO.getContent());
         comment.setPost(post);
-        return commentRepository.save(comment);
+        
+        return CommentResponseDTO.convertToDTO(commentRepository.save(comment));
     }
 
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }
+
 } 
